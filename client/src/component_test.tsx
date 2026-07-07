@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import type { IncidentReport } from "../../types";
 import { IncidentReportSummaryCard } from "./components/IncidentReportSummaryCard";
 import { IncidentReportList } from "./components/IncidentReportList";
+import { IncidentReportDetails } from "./components/IncidentReportDetails";
 
 function renderMessage(message: string) {
   const root = document.getElementById("root");
@@ -35,6 +36,11 @@ function renderComponent(
       break;
     case "IncidentReportList":
       content = <IncidentReportList reports={reports} />;
+      break;
+    case "IncidentReportDetails":
+      content = (
+        <IncidentReportDetails {...{ ...reports[0], ...overrides }} />
+      );
       break;
     default:
       renderMessage(`Unknown component: ${componentName}`);
