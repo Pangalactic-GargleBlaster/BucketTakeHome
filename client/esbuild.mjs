@@ -17,7 +17,7 @@ const common = {
 };
 
 const entries = [
-  { in: "src/main.ts", out: "dist/bundle.js" },
+  { in: "src/main.tsx", out: "dist/bundle.js" },
   { in: "src/component_test.tsx", out: "dist/component_test.js" },
 ];
 

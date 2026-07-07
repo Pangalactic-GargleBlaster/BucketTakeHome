@@ -66,7 +66,7 @@ function ImagePanel({
   );
 }
 
-export function IncidentReportDetails(report: IncidentReport) {
+export function IncidentReportDetails({ ...report }: IncidentReport) {
   const [reviewerNote, setReviewerNote] = useState(report.reviewer_note);
   const [status, setStatus] = useState(report.status);
 

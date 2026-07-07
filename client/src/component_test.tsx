@@ -1,9 +1,55 @@
 import { createRoot } from "react-dom/client";
+import { useState } from "react";
 import type { ReactNode } from "react";
 import type { IncidentReport } from "../../types";
+import { SeverityLevel } from "../../types";
 import { IncidentReportSummaryCard } from "./components/IncidentReportSummaryCard";
 import { IncidentReportList } from "./components/IncidentReportList";
 import { IncidentReportDetails } from "./components/IncidentReportDetails";
+import { IncidentReportHome } from "./components/IncidentReportHome";
+import { StringFilterPicker } from "./components/StringFilterPicker";
+import { DatetimeFilterPicker } from "./components/DatetimeFilterPicker";
+import { ConfidenceFilterPicker } from "./components/ConfidenceFilterPicker";
+
+function StringFilterPickerTest() {
+  const [selectedValues, setSelectedValues] = useState(() => new Set<string>());
+
+  return (
+    <StringFilterPicker
+      options={new Set(Object.values(SeverityLevel))}
+      selectedValues={selectedValues}
+      onSelectedValuesChange={setSelectedValues}
+    />
+  );
+}
+
+function DatetimeFilterPickerTest() {
+  const [start, setStart] = useState<Date | null>(null);
+  const [end, setEnd] = useState<Date | null>(null);
+
+  return (
+    <DatetimeFilterPicker
+      start={start}
+      end={end}
+      onStartChange={setStart}
+      onEndChange={setEnd}
+    />
+  );
+}
+
+function ConfidenceFilterPickerTest() {
+  const [lower, setLower] = useState(0);
+  const [upper, setUpper] = useState(1);
+
+  return (
+    <ConfidenceFilterPicker
+      lower={lower}
+      upper={upper}
+      onLowerChange={setLower}
+      onUpperChange={setUpper}
+    />
+  );
+}
 
 function renderMessage(message: string) {
   const root = document.getElementById("root");
@@ -42,6 +88,9 @@ function renderComponent(
         <IncidentReportDetails {...{ ...reports[0], ...overrides }} />
       );
       break;
+    case "IncidentReportHome":
+      content = <IncidentReportHome reports={reports} />;
+      break;
     default:
       renderMessage(`Unknown component: ${componentName}`);
       return;
@@ -56,6 +105,27 @@ async function main() {
 
   if (!componentName) {
     renderMessage("Missing ?component= parameter");
+    return;
+  }
+
+  if (componentName === "StringFilterPicker") {
+    const root = document.getElementById("root");
+    if (!root) return;
+    createRoot(root).render(<StringFilterPickerTest />);
+    return;
+  }
+
+  if (componentName === "DatetimeFilterPicker") {
+    const root = document.getElementById("root");
+    if (!root) return;
+    createRoot(root).render(<DatetimeFilterPickerTest />);
+    return;
+  }
+
+  if (componentName === "ConfidenceFilterPicker") {
+    const root = document.getElementById("root");
+    if (!root) return;
+    createRoot(root).render(<ConfidenceFilterPickerTest />);
     return;
   }
 

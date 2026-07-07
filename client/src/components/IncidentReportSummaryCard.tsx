@@ -17,13 +17,24 @@ const SUMMARY_FIELDS = [
   "confidence",
   "status",
   "station",
+  "created_at",
 ] as const satisfies ReadonlyArray<keyof IncidentReport>;
 
 function formatFieldName(name: string): string {
   return name.replace(/_/g, " ");
 }
 
-export function IncidentReportSummaryCard(report: IncidentReport) {
+function formatFieldValue(
+  field: (typeof SUMMARY_FIELDS)[number],
+  report: IncidentReport,
+): string {
+  if (field === "created_at") {
+    return new Date(report.created_at).toLocaleString();
+  }
+  return String(report[field]);
+}
+
+export function IncidentReportSummaryCard({ ...report }: IncidentReport) {
   const rgb = SEVERITY_RGB[report.severity];
   const backgroundColor = `rgba(${rgb}, ${report.confidence})`;
 
@@ -57,7 +68,8 @@ export function IncidentReportSummaryCard(report: IncidentReport) {
             key={field}
             style={{ border: "1px solid black", padding: "4px 8px" }}
           >
-            <strong>{formatFieldName(field)}</strong>: {report[field]}
+            <strong>{formatFieldName(field)}</strong>:{" "}
+            {formatFieldValue(field, report)}
           </div>
         ))}
       </div>
