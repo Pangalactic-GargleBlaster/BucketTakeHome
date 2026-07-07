@@ -1,0 +1,12 @@
+{
+  "recommendations": [
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "dsznajder.es7-react-js-snippets",
+    "christian-kohler.npm-intellisense",
+    "christian-kohler.path-intellisense",
+    "qwtel.sqlite-viewer",
+    "humao.rest-client",
+    "bradlc.vscode-tailwindcss"
+  ]
+}
