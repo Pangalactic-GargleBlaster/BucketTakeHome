@@ -13,8 +13,15 @@ app.get("/incident_reports", (_req, res) => {
   res.json(get_incident_reports());
 });
 
+app.get("/component_test", (_req, res) => {
+  res.sendFile(path.join(clientDir, "component_test.html"));
+});
+
 app.use(express.static(clientDir));
 
 app.listen(port, () => {
   console.log(`Server running at http://localhost:${port}`);
+}).on("error", (err: NodeJS.ErrnoException) => {
+  console.error(err);
+  process.exit(1);
 });

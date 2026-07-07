@@ -1,1 +1,1 @@
-// Client entry point — components will be added later.
+export { IncidentReportSummaryCard } from "./components/IncidentReportSummaryCard";
