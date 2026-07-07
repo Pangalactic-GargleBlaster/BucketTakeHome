@@ -20,7 +20,12 @@ app.get("/defect_report", (req, res) => {
     res.status(400).json({ error: "report_id query parameter is required" });
     return;
   }
-  res.json(get_defect_report(report_id));
+  const report = get_defect_report(report_id);
+  if (!report) {
+    res.status(404).json({ error: "defect report not found" });
+    return;
+  }
+  res.json(report);
 });
 
 app.get("/details", (_req, res) => {
