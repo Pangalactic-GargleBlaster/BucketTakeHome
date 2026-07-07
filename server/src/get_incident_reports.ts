@@ -20,6 +20,8 @@ export function get_incident_reports(): IncidentReport[] {
       finding_summary:
         "Hairline crack detected along the leading edge, approximately 2.3 mm in length.",
       reviewer_note: "",
+      image_url: "/images/20260703_185504.jpg",
+      reference_image_url: "/images/20260703_185525.jpg",
     },
     {
       report_id: "IR-2026-002",
@@ -34,6 +36,8 @@ export function get_incident_reports(): IncidentReport[] {
       finding_summary:
         "Cluster of micro-porosity near weld seam on the interior surface.",
       reviewer_note: "Needs metallurgist sign-off before disposition.",
+      image_url: "/images/20260703_185817.jpg",
+      reference_image_url: "/images/20260703_185907.jpg",
     },
     {
       report_id: "IR-2026-003",
@@ -48,6 +52,8 @@ export function get_incident_reports(): IncidentReport[] {
       finding_summary:
         "Minor surface dent on non-critical face, within cosmetic tolerance.",
       reviewer_note: "Accepted per cosmetic spec CS-12.",
+      image_url: "/images/20260703_185943.jpg",
+      reference_image_url: "/images/20260703_190037.jpg",
     },
     {
       report_id: "IR-2026-004",
@@ -62,6 +68,8 @@ export function get_incident_reports(): IncidentReport[] {
       finding_summary:
         "Bore diameter 0.08 mm undersized relative to drawing tolerance.",
       reviewer_note: "Scheduled for remachining on lathe L-04.",
+      image_url: "/images/20260703_190045.jpg",
+      reference_image_url: "/images/20260703_190121.jpg",
     },
     {
       report_id: "IR-2026-005",
@@ -76,6 +84,8 @@ export function get_incident_reports(): IncidentReport[] {
       finding_summary:
         "Foreign particulate embedded in sealing surface after cleaning cycle.",
       reviewer_note: "Discarded — cannot be reworked without compromising seal integrity.",
+      image_url: "/images/20260704_163721.jpg",
+      reference_image_url: "/images/20260704_163754.jpg",
     },
   ];
 }

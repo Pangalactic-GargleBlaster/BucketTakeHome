@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --outfile=dist/bundle.js && node -e \"require('fs').copyFileSync('index.html','dist/index.html')\"",
-    "dev": "node -e \"require('fs').mkdirSync('dist',{recursive:true});require('fs').copyFileSync('index.html','dist/index.html')\" && esbuild src/main.ts --bundle --outfile=dist/bundle.js --sourcemap --watch"
+    "build": "esbuild src/main.ts --bundle --outfile=dist/bundle.js && node -e \"const fs=require('fs');fs.mkdirSync('dist',{recursive:true});fs.copyFileSync('index.html','dist/index.html');fs.cpSync('images','dist/images',{recursive:true})\"",
+    "dev": "node -e \"const fs=require('fs');fs.mkdirSync('dist',{recursive:true});fs.copyFileSync('index.html','dist/index.html');fs.cpSync('images','dist/images',{recursive:true})\" && esbuild src/main.ts --bundle --outfile=dist/bundle.js --sourcemap --watch"
   },
   "devDependencies": {
     "esbuild": "^0.25.0",

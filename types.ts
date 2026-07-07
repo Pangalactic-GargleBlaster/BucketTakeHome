@@ -35,4 +35,6 @@ export type IncidentReport = {
   created_at: Date;
   finding_summary: string;
   reviewer_note: string;
+  image_url: string;
+  reference_image_url: string;
 };
