@@ -39,13 +39,17 @@ export function DefectReportSummaryCard({ ...report }: DefectReport) {
   const backgroundColor = `rgba(${rgb}, ${report.confidence})`;
 
   return (
-    <div
+    <a
+      href={`/details?report_id=${encodeURIComponent(report.report_id)}`}
       style={{
         backgroundColor,
         display: "flex",
         flexDirection: "column",
         width: IMAGE_SIZE,
         margin: 10,
+        textDecoration: "none",
+        color: "inherit",
+        cursor: "pointer",
       }}
     >
       <div
@@ -73,6 +77,6 @@ export function DefectReportSummaryCard({ ...report }: DefectReport) {
           </div>
         ))}
       </div>
-    </div>
+    </a>
   );
 }
