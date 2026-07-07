@@ -146,13 +146,14 @@ export function DefectReportHome({
   }
 
   return (
-    <div style={{ display: "flex" }}>
-      <aside
+    <div style={{ display: "flex", height: "95vh" }}>
+      <aside 
         style={{
           width: "fit-content",
           padding: 16,
           flexShrink: 0,
           borderRight: "1px solid black",
+          overflow: "auto",
         }}
       >
         <h2 style={{ marginTop: 0, marginBottom: 16 }}>Filters</h2>
@@ -239,7 +240,8 @@ export function DefectReportHome({
         </div>
       </aside>
 
-      <main style={{ flex: 1 }}>
+      <main style={{ flex: 1, overflow: "auto" }}>
+        <h1 style={{ marginTop: 0, marginBottom: 16, marginLeft: 16 }}>Defect Report Review Homepage</h1>
         <DefectReportList reports={sortedReports} />
       </main>
     </div>
