@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { DefectReport } from "../../../types";
 import { ReviewStatus } from "../../../types";
+import { buildHomeFilterUrl, type StringFilterField } from "../filterUrl";
 
 const IMAGE_SIZE = 500;
 
@@ -14,6 +15,21 @@ const DETAIL_FIELDS = [
   "created_at",
   "finding_summary",
 ] as const satisfies ReadonlyArray<keyof DefectReport>;
+
+const FILTER_LINK_FIELDS = [
+  "part_name",
+  "defect_type",
+  "severity",
+  "station",
+] as const satisfies ReadonlyArray<StringFilterField>;
+
+type FilterLinkField = (typeof FILTER_LINK_FIELDS)[number];
+
+function isFilterLinkField(
+  field: (typeof DETAIL_FIELDS)[number],
+): field is FilterLinkField {
+  return (FILTER_LINK_FIELDS as readonly string[]).includes(field);
+}
 
 function formatFieldName(name: string): string {
   return name.replace(/_/g, " ");
@@ -94,7 +110,13 @@ export function DefectReportDetails({ ...report }: DefectReport) {
           {DETAIL_FIELDS.map((field) => (
             <span key={field} style={{ display: "block" }}>
               <strong>{formatFieldName(field)}</strong>:{" "}
-              {formatFieldValue(field, report)}
+              {isFilterLinkField(field) ? (
+                <a href={buildHomeFilterUrl(field, String(report[field]))}>
+                  {formatFieldValue(field, report)}
+                </a>
+              ) : (
+                formatFieldValue(field, report)
+              )}
             </span>
           ))}
         </p>

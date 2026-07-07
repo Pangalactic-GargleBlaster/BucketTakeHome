@@ -60,6 +60,15 @@ export function readFiltersFromUrl(
   };
 }
 
+export function buildHomeFilterUrl(
+  field: StringFilterField,
+  value: string,
+): string {
+  const params = new URLSearchParams();
+  params.append(field, value);
+  return `/?${params.toString()}`;
+}
+
 export function writeFiltersToUrl(filters: FilterState) {
   const params = new URLSearchParams();
 
