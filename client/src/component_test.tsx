@@ -1,11 +1,8 @@
 import { createRoot } from "react-dom/client";
-import type { ComponentType } from "react";
+import type { ReactNode } from "react";
 import type { IncidentReport } from "../../types";
 import { IncidentReportSummaryCard } from "./components/IncidentReportSummaryCard";
-
-const COMPONENTS: Record<string, ComponentType<IncidentReport>> = {
-  IncidentReportSummaryCard,
-};
+import { IncidentReportList } from "./components/IncidentReportList";
 
 function renderMessage(message: string) {
   const root = document.getElementById("root");
@@ -21,18 +18,38 @@ function parseOverrides(overridesParam: string): Partial<IncidentReport> | null 
   }
 }
 
+function renderComponent(
+  componentName: string,
+  reports: IncidentReport[],
+  overrides: Partial<IncidentReport>,
+) {
+  const root = document.getElementById("root");
+  if (!root) return;
+
+  let content: ReactNode;
+  switch (componentName) {
+    case "IncidentReportSummaryCard":
+      content = (
+        <IncidentReportSummaryCard {...{ ...reports[0], ...overrides }} />
+      );
+      break;
+    case "IncidentReportList":
+      content = <IncidentReportList reports={reports} />;
+      break;
+    default:
+      renderMessage(`Unknown component: ${componentName}`);
+      return;
+  }
+
+  createRoot(root).render(content);
+}
+
 async function main() {
   const params = new URLSearchParams(window.location.search);
   const componentName = params.get("component");
 
   if (!componentName) {
     renderMessage("Missing ?component= parameter");
-    return;
-  }
-
-  const Component = COMPONENTS[componentName];
-  if (!Component) {
-    renderMessage(`Unknown component: ${componentName}`);
     return;
   }
 
@@ -65,11 +82,7 @@ async function main() {
     return;
   }
 
-  const report = { ...reports[0], ...overrides };
-  const root = document.getElementById("root");
-  if (!root) return;
-
-  createRoot(root).render(<Component {...report} />);
+  renderComponent(componentName, reports, overrides);
 }
 
 main();

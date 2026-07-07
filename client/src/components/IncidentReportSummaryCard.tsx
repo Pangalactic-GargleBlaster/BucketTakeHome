@@ -3,8 +3,8 @@ import { SeverityLevel } from "../../../types";
 
 const SEVERITY_RGB: Record<SeverityLevel, string> = {
   [SeverityLevel.LOW]: "0, 128, 0",
-  [SeverityLevel.MEDIUM]: "255, 255, 0",
-  [SeverityLevel.HIGH]: "255, 165, 0",
+  [SeverityLevel.MEDIUM]: "0, 0, 255",
+  [SeverityLevel.HIGH]: "255, 255, 0",
   [SeverityLevel.CRITICAL]: "255, 0, 0",
 };
 
@@ -34,6 +34,7 @@ export function IncidentReportSummaryCard(report: IncidentReport) {
         display: "flex",
         flexDirection: "column",
         width: IMAGE_SIZE,
+        margin: 10,
       }}
     >
       <div
