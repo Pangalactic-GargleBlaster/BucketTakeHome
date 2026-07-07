@@ -77,3 +77,50 @@ export function getDefectReportById(reportId: string): DefectReport | undefined 
   const row = selectByIdStmt.get(reportId) as DefectReportRow | undefined;
   return row ? rowToDefectReport(row) : undefined;
 }
+
+const upsertStmt = db.prepare(`
+  INSERT OR REPLACE INTO defect_report (
+    report_id,
+    part_name,
+    part_id,
+    defect_type,
+    severity,
+    confidence,
+    status,
+    station,
+    created_at,
+    finding_summary,
+    reviewer_note,
+    image_url,
+    reference_image_url
+  ) VALUES (
+    @report_id,
+    @part_name,
+    @part_id,
+    @defect_type,
+    @severity,
+    @confidence,
+    @status,
+    @station,
+    @created_at,
+    @finding_summary,
+    @reviewer_note,
+    @image_url,
+    @reference_image_url
+  )
+`);
+
+function defectReportToRow(report: DefectReport): DefectReportRow {
+  return {
+    ...report,
+    created_at:
+      report.created_at instanceof Date
+        ? report.created_at.toISOString()
+        : new Date(report.created_at).toISOString(),
+  };
+}
+
+export function upsertDefectReport(report: DefectReport): DefectReport {
+  upsertStmt.run(defectReportToRow(report));
+  return report;
+}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import type { DefectReport } from "../../../types";
 import { ReviewStatus } from "../../../types";
+import { submitReview } from "../api";
 import { buildHomeFilterUrl, type StringFilterField } from "../filterUrl";
 
 const IMAGE_SIZE = 500;
@@ -85,6 +86,28 @@ function ImagePanel({
 export function DefectReportDetails({ ...report }: DefectReport) {
   const [reviewerNote, setReviewerNote] = useState(report.reviewer_note);
   const [status, setStatus] = useState(report.status);
+  const [isSaving, setIsSaving] = useState(false);
+  const [saveStatus, setSaveStatus] = useState<"idle" | "saving" | "saved" | "failed">(
+    "idle",
+  );
+
+  async function handleSubmit() {
+    setIsSaving(true);
+    setSaveStatus("saving");
+
+    try {
+      await submitReview({
+        ...report,
+        reviewer_note: reviewerNote,
+        status,
+      });
+      setSaveStatus("saved");
+    } catch {
+      setSaveStatus("failed");
+    } finally {
+      setIsSaving(false);
+    }
+  }
 
   return (
     <div style={{ margin: 20 }}>
@@ -146,9 +169,24 @@ export function DefectReportDetails({ ...report }: DefectReport) {
             </select>
           </label>
 
-          <button type="button" disabled={status === ReviewStatus.UNREVIEWED}>
-            Submit review
-          </button>
+          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            <button
+              type="button"
+              disabled={status === ReviewStatus.UNREVIEWED || isSaving}
+              onClick={handleSubmit}
+            >
+              Submit review
+            </button>
+            {saveStatus === "saving" && (
+              <span style={{ color: "yellow" }}>saving review...</span>
+            )}
+            {saveStatus === "saved" && (
+              <span style={{ color: "green" }}>saved review</span>
+            )}
+            {saveStatus === "failed" && (
+              <span style={{ color: "red" }}>failed to save review</span>
+            )}
+          </div>
         </div>
       </div>
     </div>

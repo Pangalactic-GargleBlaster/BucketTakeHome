@@ -5,6 +5,17 @@ export type StringFilterField =
   | "status"
   | "station";
 
+export type SortField =
+  | "part_name"
+  | "defect_type"
+  | "severity"
+  | "status"
+  | "station"
+  | "confidence"
+  | "created_at";
+
+export type SortDirection = "asc" | "desc";
+
 export type FilterState = {
   part_name: Set<string>;
   defect_type: Set<string>;
@@ -15,7 +26,30 @@ export type FilterState = {
   confidenceUpper: number;
   createdAtStart: Date | null;
   createdAtEnd: Date | null;
+  sortBy: SortField;
+  sortDirection: SortDirection;
 };
+
+export const SORT_FIELDS: SortField[] = [
+  "part_name",
+  "defect_type",
+  "severity",
+  "status",
+  "station",
+  "confidence",
+  "created_at",
+];
+
+const DEFAULT_SORT_BY: SortField = "created_at";
+const DEFAULT_SORT_DIRECTION: SortDirection = "desc";
+
+function isSortField(value: string): value is SortField {
+  return (SORT_FIELDS as string[]).includes(value);
+}
+
+function isSortDirection(value: string): value is SortDirection {
+  return value === "asc" || value === "desc";
+}
 
 const STRING_FILTER_FIELDS: StringFilterField[] = [
   "part_name",
@@ -57,6 +91,18 @@ export function readFiltersFromUrl(
     confidenceUpper: readOptionalNumber(params, "confidence_upper") ?? 1,
     createdAtStart: readOptionalDate(params, "created_at_start"),
     createdAtEnd: readOptionalDate(params, "created_at_end"),
+    sortBy:
+      (() => {
+        const value = params.get("sort_by");
+        return value && isSortField(value) ? value : DEFAULT_SORT_BY;
+      })(),
+    sortDirection:
+      (() => {
+        const value = params.get("sort_direction");
+        return value && isSortDirection(value)
+          ? value
+          : DEFAULT_SORT_DIRECTION;
+      })(),
   };
 }
 
@@ -89,6 +135,12 @@ export function writeFiltersToUrl(filters: FilterState) {
   }
   if (filters.createdAtEnd) {
     params.set("created_at_end", filters.createdAtEnd.toISOString());
+  }
+  if (filters.sortBy !== DEFAULT_SORT_BY) {
+    params.set("sort_by", filters.sortBy);
+  }
+  if (filters.sortDirection !== DEFAULT_SORT_DIRECTION) {
+    params.set("sort_direction", filters.sortDirection);
   }
 
   const query = params.toString();

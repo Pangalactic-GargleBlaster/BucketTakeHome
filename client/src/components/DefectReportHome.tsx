@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import type { DefectReport } from "../../../types";
+import { SEVERITY_RANK } from "../../../types";
 import { DefectReportList } from "./DefectReportList";
 import { StringFilterPicker } from "./StringFilterPicker";
 import { DatetimeFilterPicker } from "./DatetimeFilterPicker";
@@ -8,6 +9,8 @@ import {
   readFiltersFromUrl,
   writeFiltersToUrl,
   type FilterState,
+  type SortDirection,
+  type SortField,
   type StringFilterField,
 } from "../filterUrl";
 
@@ -17,6 +20,16 @@ const STRING_FILTERS: { field: StringFilterField; label: string }[] = [
   { field: "severity", label: "severity" },
   { field: "status", label: "status" },
   { field: "station", label: "station" },
+];
+
+const SORT_OPTIONS: { field: SortField; label: string }[] = [
+  { field: "part_name", label: "part name" },
+  { field: "defect_type", label: "defect type" },
+  { field: "severity", label: "severity" },
+  { field: "status", label: "status" },
+  { field: "station", label: "station" },
+  { field: "confidence", label: "confidence" },
+  { field: "created_at", label: "created at" },
 ];
 
 function collectOptions(
@@ -62,6 +75,39 @@ function applyFilters(
   });
 }
 
+function getSortValue(report: DefectReport, sortBy: SortField): string | number {
+  if (sortBy === "confidence") {
+    return report.confidence;
+  }
+  if (sortBy === "created_at") {
+    return new Date(report.created_at).getTime();
+  }
+  if (sortBy === "severity") {
+    return SEVERITY_RANK[report.severity];
+  }
+  return String(report[sortBy]);
+}
+
+function compareSortValues(a: string | number, b: string | number): number {
+  if (typeof a === "number" && typeof b === "number") {
+    return a - b;
+  }
+  return String(a).localeCompare(String(b));
+}
+
+function applySort(
+  reports: DefectReport[],
+  sortBy: SortField,
+  sortDirection: SortDirection,
+): DefectReport[] {
+  const direction = sortDirection === "asc" ? 1 : -1;
+  return [...reports].sort(
+    (a, b) =>
+      compareSortValues(getSortValue(a, sortBy), getSortValue(b, sortBy)) *
+      direction,
+  );
+}
+
 export function DefectReportHome({
   reports,
 }: {
@@ -83,6 +129,12 @@ export function DefectReportHome({
   const filteredReports = useMemo(
     () => applyFilters(reports, filters),
     [reports, filters],
+  );
+
+  const sortedReports = useMemo(
+    () =>
+      applySort(filteredReports, filters.sortBy, filters.sortDirection),
+    [filteredReports, filters.sortBy, filters.sortDirection],
   );
 
   function updateFilters(patch: Partial<FilterState>) {
@@ -142,10 +194,53 @@ export function DefectReportHome({
             onEndChange={(createdAtEnd) => updateFilters({ createdAtEnd })}
           />
         </div>
+
+        <div style={{ marginBottom: 12 }}>
+          <label style={{ display: "block" }}>
+            <div style={{ fontWeight: "bold", marginBottom: 4 }}>sort by</div>
+            <select
+              value={filters.sortBy}
+              onChange={(e) =>
+                updateFilters({ sortBy: e.target.value as SortField })
+              }
+              style={{ width: 200 }}
+            >
+              {SORT_OPTIONS.map(({ field, label }) => (
+                <option key={field} value={field}>
+                  {label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+
+        <div style={{ marginBottom: 12 }}>
+          <div style={{ fontWeight: "bold", marginBottom: 4 }}>sort direction</div>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="radio"
+              name="sort_direction"
+              value="asc"
+              checked={filters.sortDirection === "asc"}
+              onChange={() => updateFilters({ sortDirection: "asc" })}
+            />
+            ascending
+          </label>
+          <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <input
+              type="radio"
+              name="sort_direction"
+              value="desc"
+              checked={filters.sortDirection === "desc"}
+              onChange={() => updateFilters({ sortDirection: "desc" })}
+            />
+            descending
+          </label>
+        </div>
       </aside>
 
       <main style={{ flex: 1 }}>
-        <DefectReportList reports={filteredReports} />
+        <DefectReportList reports={sortedReports} />
       </main>
     </div>
   );

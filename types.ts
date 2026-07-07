@@ -15,6 +15,13 @@ export enum SeverityLevel {
   CRITICAL = "critical",
 }
 
+export const SEVERITY_RANK: Record<SeverityLevel, number> = {
+  [SeverityLevel.LOW]: 0,
+  [SeverityLevel.MEDIUM]: 1,
+  [SeverityLevel.HIGH]: 2,
+  [SeverityLevel.CRITICAL]: 3,
+};
+
 export enum ReviewStatus {
   UNREVIEWED = "unreviewed",
   PART_ACCEPTED = "part accepted",

@@ -3,12 +3,15 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { get_defect_report } from "./get_defect_report.js";
 import { get_defect_reports } from "./get_defect_reports.js";
+import { record_review } from "./record_review.js";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const clientDir = path.resolve(__dirname, "../../client/dist");
 
 const app = express();
 const port = Number(process.env.PORT) || 3000;
+
+app.use(express.json());
 
 app.get("/defect_reports", (_req, res) => {
   res.json(get_defect_reports());
@@ -26,6 +29,25 @@ app.get("/defect_report", (req, res) => {
     return;
   }
   res.json(report);
+});
+
+app.post("/review", (req, res) => {
+  const report = req.body;
+  if (
+    !report ||
+    typeof report !== "object" ||
+    typeof report.report_id !== "string" ||
+    report.report_id.length === 0
+  ) {
+    res.status(400).json({ error: "valid DefectReport body with report_id is required" });
+    return;
+  }
+
+  try {
+    res.json(record_review(report));
+  } catch {
+    res.status(400).json({ error: "invalid DefectReport body" });
+  }
 });
 
 app.get("/details", (_req, res) => {

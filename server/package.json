@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "tsx watch src/index.ts",
     "start": "node --import tsx src/index.ts",
-    "seed": "tsx src/seed_db.ts"
+    "seed-db": "tsx src/seed_db.ts"
   },
   "dependencies": {
     "better-sqlite3": "^12.2.0",

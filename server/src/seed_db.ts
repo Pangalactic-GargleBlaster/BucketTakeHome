@@ -81,7 +81,7 @@ type SeedReport = {
 const baseReports: SeedReport[] = [
   {
     report_id: "DR-2026-001",
-    part_name: "Turbine Blade A",
+    part_name: "Turbine Blade",
     part_id: "TB-A-1042",
     defect_type: DefectType.CRACK,
     severity: SeverityLevel.CRITICAL,
@@ -97,7 +97,7 @@ const baseReports: SeedReport[] = [
   },
   {
     report_id: "DR-2026-002",
-    part_name: "Housing Cover B",
+    part_name: "Housing Cover",
     part_id: "HC-B-0871",
     defect_type: DefectType.POROSITY,
     severity: SeverityLevel.MEDIUM,
@@ -113,7 +113,7 @@ const baseReports: SeedReport[] = [
   },
   {
     report_id: "DR-2026-003",
-    part_name: "Bracket C",
+    part_name: "Bracket",
     part_id: "BR-C-3310",
     defect_type: DefectType.SURFACE_DENT,
     severity: SeverityLevel.LOW,
@@ -129,7 +129,7 @@ const baseReports: SeedReport[] = [
   },
   {
     report_id: "DR-2026-004",
-    part_name: "Shaft D",
+    part_name: "Shaft",
     part_id: "SH-D-2205",
     defect_type: DefectType.DIMENSIONAL_MISMATCH,
     severity: SeverityLevel.HIGH,
@@ -145,7 +145,7 @@ const baseReports: SeedReport[] = [
   },
   {
     report_id: "DR-2026-005",
-    part_name: "Seal Ring E",
+    part_name: "Seal Ring",
     part_id: "SR-E-1199",
     defect_type: DefectType.CONTAMINATION,
     severity: SeverityLevel.MEDIUM,
@@ -162,18 +162,20 @@ const baseReports: SeedReport[] = [
   },
 ];
 
-const partTemplates = [
-  { name: "Turbine Blade", prefix: "TB" },
-  { name: "Housing Cover", prefix: "HC" },
-  { name: "Bracket", prefix: "BR" },
-  { name: "Shaft", prefix: "SH" },
-  { name: "Seal Ring", prefix: "SR" },
-  { name: "Flange Plate", prefix: "FP" },
-  { name: "Gear Housing", prefix: "GH" },
-  { name: "Valve Body", prefix: "VB" },
-  { name: "Impeller", prefix: "IM" },
-  { name: "Mounting Plate", prefix: "MP" },
+const partNames = [
+  "Turbine Blade",
+  "Housing Cover",
+  "Bracket",
+  "Shaft",
+  "Seal Ring",
+  "Flange Plate",
+  "Gear Housing",
+  "Valve Body",
+  "Impeller",
+  "Mounting Plate",
 ];
+
+const partIdPrefixes = ["TB", "HC", "BR", "SH", "SR", "FP", "GH", "VB", "IM", "MP"];
 
 const stations = ["CMM-01", "CMM-02", "CMM-03", "VIS-01", "VIS-02", "VIS-03"];
 
@@ -255,13 +257,19 @@ function pick<T>(items: T[], index: number): T {
   return items[index % items.length];
 }
 
+function confidenceForRecord(index: number, total: number): number {
+  if (total <= 1) {
+    return 0.1;
+  }
+  return Number((0.1 + ((index - 1) / (total - 1)) * 0.85).toFixed(2));
+}
+
 function generateReports(total: number): SeedReport[] {
   const reports = [...baseReports];
   const startIndex = baseReports.length + 1;
 
   for (let i = startIndex; i <= total; i++) {
-    const template = pick(partTemplates, i);
-    const suffix = String.fromCharCode(65 + (i % 26));
+    const prefix = pick(partIdPrefixes, i);
     const defectType = pick(defectTypes, i);
     const severity = pick(severities, i + 2);
     const status = pick(statuses, i + 1);
@@ -272,11 +280,11 @@ function generateReports(total: number): SeedReport[] {
 
     reports.push({
       report_id: `DR-2026-${String(i).padStart(3, "0")}`,
-      part_name: `${template.name} ${suffix}`,
-      part_id: `${template.prefix}-${suffix}-${1000 + i}`,
+      part_name: "",
+      part_id: `${prefix}-${1000 + i}`,
       defect_type: defectType,
       severity,
-      confidence: Number((0.55 + ((i * 17) % 43) / 100).toFixed(2)),
+      confidence: 0,
       status,
       station: pick(stations, i),
       created_at: new Date(
@@ -289,7 +297,11 @@ function generateReports(total: number): SeedReport[] {
     });
   }
 
-  return reports;
+  return reports.map((report, index) => ({
+    ...report,
+    part_name: pick(partNames, index),
+    confidence: confidenceForRecord(index + 1, total),
+  }));
 }
 
 const seedReports = generateReports(50);
