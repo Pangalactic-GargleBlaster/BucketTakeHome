@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { IncidentReport } from "../../../types";
+import type { DefectReport } from "../../../types";
 import { ReviewStatus } from "../../../types";
 
 const IMAGE_SIZE = 500;
@@ -13,7 +13,7 @@ const DETAIL_FIELDS = [
   "station",
   "created_at",
   "finding_summary",
-] as const satisfies ReadonlyArray<keyof IncidentReport>;
+] as const satisfies ReadonlyArray<keyof DefectReport>;
 
 function formatFieldName(name: string): string {
   return name.replace(/_/g, " ");
@@ -21,7 +21,7 @@ function formatFieldName(name: string): string {
 
 function formatFieldValue(
   field: (typeof DETAIL_FIELDS)[number],
-  report: IncidentReport,
+  report: DefectReport,
 ): string {
   if (field === "created_at") {
     return new Date(report.created_at).toLocaleString();
@@ -66,7 +66,7 @@ function ImagePanel({
   );
 }
 
-export function IncidentReportDetails({ ...report }: IncidentReport) {
+export function DefectReportDetails({ ...report }: DefectReport) {
   const [reviewerNote, setReviewerNote] = useState(report.reviewer_note);
   const [status, setStatus] = useState(report.status);
 

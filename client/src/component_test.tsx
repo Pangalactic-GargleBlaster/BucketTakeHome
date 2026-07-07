@@ -1,12 +1,12 @@
 import { createRoot } from "react-dom/client";
 import { useState } from "react";
 import type { ReactNode } from "react";
-import type { IncidentReport } from "../../types";
+import type { DefectReport } from "../../types";
 import { SeverityLevel } from "../../types";
-import { IncidentReportSummaryCard } from "./components/IncidentReportSummaryCard";
-import { IncidentReportList } from "./components/IncidentReportList";
-import { IncidentReportDetails } from "./components/IncidentReportDetails";
-import { IncidentReportHome } from "./components/IncidentReportHome";
+import { DefectReportSummaryCard } from "./components/DefectReportSummaryCard";
+import { DefectReportList } from "./components/DefectReportList";
+import { DefectReportDetails } from "./components/DefectReportDetails";
+import { DefectReportHome } from "./components/DefectReportHome";
 import { StringFilterPicker } from "./components/StringFilterPicker";
 import { DatetimeFilterPicker } from "./components/DatetimeFilterPicker";
 import { ConfidenceFilterPicker } from "./components/ConfidenceFilterPicker";
@@ -57,9 +57,9 @@ function renderMessage(message: string) {
   createRoot(root).render(<p>{message}</p>);
 }
 
-function parseOverrides(overridesParam: string): Partial<IncidentReport> | null {
+function parseOverrides(overridesParam: string): Partial<DefectReport> | null {
   try {
-    return JSON.parse(overridesParam) as Partial<IncidentReport>;
+    return JSON.parse(overridesParam) as Partial<DefectReport>;
   } catch {
     return null;
   }
@@ -67,29 +67,29 @@ function parseOverrides(overridesParam: string): Partial<IncidentReport> | null 
 
 function renderComponent(
   componentName: string,
-  reports: IncidentReport[],
-  overrides: Partial<IncidentReport>,
+  reports: DefectReport[],
+  overrides: Partial<DefectReport>,
 ) {
   const root = document.getElementById("root");
   if (!root) return;
 
   let content: ReactNode;
   switch (componentName) {
-    case "IncidentReportSummaryCard":
+    case "DefectReportSummaryCard":
       content = (
-        <IncidentReportSummaryCard {...{ ...reports[0], ...overrides }} />
+        <DefectReportSummaryCard {...{ ...reports[0], ...overrides }} />
       );
       break;
-    case "IncidentReportList":
-      content = <IncidentReportList reports={reports} />;
+    case "DefectReportList":
+      content = <DefectReportList reports={reports} />;
       break;
-    case "IncidentReportDetails":
+    case "DefectReportDetails":
       content = (
-        <IncidentReportDetails {...{ ...reports[0], ...overrides }} />
+        <DefectReportDetails {...{ ...reports[0], ...overrides }} />
       );
       break;
-    case "IncidentReportHome":
-      content = <IncidentReportHome reports={reports} />;
+    case "DefectReportHome":
+      content = <DefectReportHome reports={reports} />;
       break;
     default:
       renderMessage(`Unknown component: ${componentName}`);
@@ -129,7 +129,7 @@ async function main() {
     return;
   }
 
-  let overrides: Partial<IncidentReport> = {};
+  let overrides: Partial<DefectReport> = {};
   const overridesParam = params.get("overrides");
   if (overridesParam) {
     const parsed = parseOverrides(overridesParam);
@@ -140,21 +140,21 @@ async function main() {
     overrides = parsed;
   }
 
-  let reports: IncidentReport[];
+  let reports: DefectReport[];
   try {
-    const response = await fetch("/incident_reports");
+    const response = await fetch("/defect_reports");
     if (!response.ok) {
-      renderMessage(`Failed to fetch incident reports (${response.status})`);
+      renderMessage(`Failed to fetch defect reports (${response.status})`);
       return;
     }
     reports = await response.json();
   } catch {
-    renderMessage("Failed to fetch incident reports");
+    renderMessage("Failed to fetch defect reports");
     return;
   }
 
   if (reports.length === 0) {
-    renderMessage("No incident reports available");
+    renderMessage("No defect reports available");
     return;
   }
 

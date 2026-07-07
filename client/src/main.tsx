@@ -1,23 +1,23 @@
 import { createRoot } from "react-dom/client";
-import type { IncidentReport } from "../../types";
-import { IncidentReportHome } from "./components/IncidentReportHome";
+import type { DefectReport } from "../../types";
+import { DefectReportHome } from "./components/DefectReportHome";
 
 async function bootstrap() {
   const rootEl = document.getElementById("root");
   if (!rootEl) return;
 
   try {
-    const response = await fetch("/incident_reports");
+    const response = await fetch("/defect_reports");
     if (!response.ok) {
       createRoot(rootEl).render(
-        <p>Failed to load incident reports ({response.status})</p>,
+        <p>Failed to load defect reports ({response.status})</p>,
       );
       return;
     }
-    const reports: IncidentReport[] = await response.json();
-    createRoot(rootEl).render(<IncidentReportHome reports={reports} />);
+    const reports: DefectReport[] = await response.json();
+    createRoot(rootEl).render(<DefectReportHome reports={reports} />);
   } catch {
-    createRoot(rootEl).render(<p>Failed to load incident reports</p>);
+    createRoot(rootEl).render(<p>Failed to load defect reports</p>);
   }
 }
 

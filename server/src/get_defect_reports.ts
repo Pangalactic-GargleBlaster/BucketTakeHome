@@ -1,14 +1,14 @@
 import {
   DefectType,
-  IncidentReport,
+  DefectReport,
   ReviewStatus,
   SeverityLevel,
 } from "../../types.js";
 
-export function get_incident_reports(): IncidentReport[] {
+export function get_defect_reports(): DefectReport[] {
   return [
     {
-      report_id: "IR-2026-001",
+      report_id: "DR-2026-001",
       part_name: "Turbine Blade A",
       part_id: "TB-A-1042",
       defect_type: DefectType.CRACK,
@@ -24,7 +24,7 @@ export function get_incident_reports(): IncidentReport[] {
       reference_image_url: "/images/20260703_185525.jpg",
     },
     {
-      report_id: "IR-2026-002",
+      report_id: "DR-2026-002",
       part_name: "Housing Cover B",
       part_id: "HC-B-0871",
       defect_type: DefectType.POROSITY,
@@ -40,7 +40,7 @@ export function get_incident_reports(): IncidentReport[] {
       reference_image_url: "/images/20260703_185907.jpg",
     },
     {
-      report_id: "IR-2026-003",
+      report_id: "DR-2026-003",
       part_name: "Bracket C",
       part_id: "BR-C-3310",
       defect_type: DefectType.SURFACE_DENT,
@@ -56,7 +56,7 @@ export function get_incident_reports(): IncidentReport[] {
       reference_image_url: "/images/20260703_190037.jpg",
     },
     {
-      report_id: "IR-2026-004",
+      report_id: "DR-2026-004",
       part_name: "Shaft D",
       part_id: "SH-D-2205",
       defect_type: DefectType.DIMENSIONAL_MISMATCH,
@@ -72,7 +72,7 @@ export function get_incident_reports(): IncidentReport[] {
       reference_image_url: "/images/20260703_190121.jpg",
     },
     {
-      report_id: "IR-2026-005",
+      report_id: "DR-2026-005",
       part_name: "Seal Ring E",
       part_id: "SR-E-1199",
       defect_type: DefectType.CONTAMINATION,

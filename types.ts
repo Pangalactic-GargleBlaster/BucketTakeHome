@@ -23,7 +23,7 @@ export enum ReviewStatus {
   WAITING_FOR_IN_PERSON_REVIEW = "waiting for in-person review",
 }
 
-export type IncidentReport = {
+export type DefectReport = {
   report_id: string;
   part_name: string;
   part_id: string;

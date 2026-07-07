@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
-import type { IncidentReport } from "../../../types";
-import { IncidentReportList } from "./IncidentReportList";
+import type { DefectReport } from "../../../types";
+import { DefectReportList } from "./DefectReportList";
 import { StringFilterPicker } from "./StringFilterPicker";
 import { DatetimeFilterPicker } from "./DatetimeFilterPicker";
 import { ConfidenceFilterPicker } from "./ConfidenceFilterPicker";
@@ -20,16 +20,16 @@ const STRING_FILTERS: { field: StringFilterField; label: string }[] = [
 ];
 
 function collectOptions(
-  reports: IncidentReport[],
+  reports: DefectReport[],
   field: StringFilterField,
 ): Set<string> {
   return new Set(reports.map((report) => String(report[field])));
 }
 
 function applyFilters(
-  reports: IncidentReport[],
+  reports: DefectReport[],
   filters: FilterState,
-): IncidentReport[] {
+): DefectReport[] {
   return reports.filter((report) => {
     for (const { field } of STRING_FILTERS) {
       const selected = filters[field];
@@ -62,10 +62,10 @@ function applyFilters(
   });
 }
 
-export function IncidentReportHome({
+export function DefectReportHome({
   reports,
 }: {
-  reports: IncidentReport[];
+  reports: DefectReport[];
 }) {
   const [filters, setFilters] = useState(() => readFiltersFromUrl());
 
@@ -95,7 +95,14 @@ export function IncidentReportHome({
 
   return (
     <div style={{ display: "flex" }}>
-      <aside style={{ width: "fit-content", padding: 16, flexShrink: 0 }}>
+      <aside
+        style={{
+          width: "fit-content",
+          padding: 16,
+          flexShrink: 0,
+          borderRight: "1px solid black",
+        }}
+      >
         <h2 style={{ marginTop: 0, marginBottom: 16 }}>Filters</h2>
         {STRING_FILTERS.map(({ field, label }) => (
           <div key={field} style={{ marginBottom: 12 }}>
@@ -138,7 +145,7 @@ export function IncidentReportHome({
       </aside>
 
       <main style={{ flex: 1 }}>
-        <IncidentReportList reports={filteredReports} />
+        <DefectReportList reports={filteredReports} />
       </main>
     </div>
   );

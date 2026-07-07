@@ -1,4 +1,4 @@
-import type { IncidentReport } from "../../../types";
+import type { DefectReport } from "../../../types";
 import { SeverityLevel } from "../../../types";
 
 const SEVERITY_RGB: Record<SeverityLevel, string> = {
@@ -18,7 +18,7 @@ const SUMMARY_FIELDS = [
   "status",
   "station",
   "created_at",
-] as const satisfies ReadonlyArray<keyof IncidentReport>;
+] as const satisfies ReadonlyArray<keyof DefectReport>;
 
 function formatFieldName(name: string): string {
   return name.replace(/_/g, " ");
@@ -26,7 +26,7 @@ function formatFieldName(name: string): string {
 
 function formatFieldValue(
   field: (typeof SUMMARY_FIELDS)[number],
-  report: IncidentReport,
+  report: DefectReport,
 ): string {
   if (field === "created_at") {
     return new Date(report.created_at).toLocaleString();
@@ -34,7 +34,7 @@ function formatFieldValue(
   return String(report[field]);
 }
 
-export function IncidentReportSummaryCard({ ...report }: IncidentReport) {
+export function DefectReportSummaryCard({ ...report }: DefectReport) {
   const rgb = SEVERITY_RGB[report.severity];
   const backgroundColor = `rgba(${rgb}, ${report.confidence})`;
 
