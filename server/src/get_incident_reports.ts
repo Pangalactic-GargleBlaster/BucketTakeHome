@@ -1,0 +1,81 @@
+import {
+  DefectType,
+  IncidentReport,
+  ReviewStatus,
+  SeverityLevel,
+} from "../../types.js";
+
+export function get_incident_reports(): IncidentReport[] {
+  return [
+    {
+      report_id: "IR-2026-001",
+      part_name: "Turbine Blade A",
+      part_id: "TB-A-1042",
+      defect_type: DefectType.CRACK,
+      severity: SeverityLevel.CRITICAL,
+      confidence: 0.94,
+      status: ReviewStatus.UNREVIEWED,
+      station: "CMM-03",
+      created_at: new Date("2026-07-05T14:22:00Z"),
+      finding_summary:
+        "Hairline crack detected along the leading edge, approximately 2.3 mm in length.",
+      reviewer_note: "",
+    },
+    {
+      report_id: "IR-2026-002",
+      part_name: "Housing Cover B",
+      part_id: "HC-B-0871",
+      defect_type: DefectType.POROSITY,
+      severity: SeverityLevel.MEDIUM,
+      confidence: 0.81,
+      status: ReviewStatus.WAITING_FOR_IN_PERSON_REVIEW,
+      station: "VIS-01",
+      created_at: new Date("2026-07-06T09:15:00Z"),
+      finding_summary:
+        "Cluster of micro-porosity near weld seam on the interior surface.",
+      reviewer_note: "Needs metallurgist sign-off before disposition.",
+    },
+    {
+      report_id: "IR-2026-003",
+      part_name: "Bracket C",
+      part_id: "BR-C-3310",
+      defect_type: DefectType.SURFACE_DENT,
+      severity: SeverityLevel.LOW,
+      confidence: 0.72,
+      status: ReviewStatus.PART_ACCEPTED,
+      station: "VIS-02",
+      created_at: new Date("2026-07-06T11:40:00Z"),
+      finding_summary:
+        "Minor surface dent on non-critical face, within cosmetic tolerance.",
+      reviewer_note: "Accepted per cosmetic spec CS-12.",
+    },
+    {
+      report_id: "IR-2026-004",
+      part_name: "Shaft D",
+      part_id: "SH-D-2205",
+      defect_type: DefectType.DIMENSIONAL_MISMATCH,
+      severity: SeverityLevel.HIGH,
+      confidence: 0.89,
+      status: ReviewStatus.WAITING_FOR_RERUN,
+      station: "CMM-01",
+      created_at: new Date("2026-07-07T08:05:00Z"),
+      finding_summary:
+        "Bore diameter 0.08 mm undersized relative to drawing tolerance.",
+      reviewer_note: "Scheduled for remachining on lathe L-04.",
+    },
+    {
+      report_id: "IR-2026-005",
+      part_name: "Seal Ring E",
+      part_id: "SR-E-1199",
+      defect_type: DefectType.CONTAMINATION,
+      severity: SeverityLevel.MEDIUM,
+      confidence: 0.77,
+      status: ReviewStatus.PART_DISCARDED,
+      station: "VIS-03",
+      created_at: new Date("2026-07-07T10:30:00Z"),
+      finding_summary:
+        "Foreign particulate embedded in sealing surface after cleaning cycle.",
+      reviewer_note: "Discarded — cannot be reworked without compromising seal integrity.",
+    },
+  ];
+}

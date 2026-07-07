@@ -3,11 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "esbuild src/main.ts --bundle --outfile=dist/bundle.js",
-    "dev": "esbuild src/main.ts --bundle --outfile=dist/bundle.js --sourcemap --watch"
+    "build": "esbuild src/main.ts --bundle --outfile=dist/bundle.js && node -e \"require('fs').copyFileSync('index.html','dist/index.html')\"",
+    "dev": "node -e \"require('fs').mkdirSync('dist',{recursive:true});require('fs').copyFileSync('index.html','dist/index.html')\" && esbuild src/main.ts --bundle --outfile=dist/bundle.js --sourcemap --watch"
   },
   "devDependencies": {
-    "esbuild": "^0.25.0"
+    "esbuild": "^0.25.0",
+    "typescript": "^5.8.3"
   },
   "allowScripts": {
     "esbuild@0.25.12": true
