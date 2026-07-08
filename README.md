@@ -18,11 +18,21 @@ I mostly stuck to the data model that was suggested, but I added a reference ima
 
 ## Running the app
 
-from the root folder, run
+In case your computer doesn't already have node.js, you'll need to install it. You can do so at [https://nodejs.org/en](https://nodejs.org/en)
+
+To install the dependencies
+
+`cd server`  
+`npm install`  
+`cd ../client`  
+`npm install`  
+
+then, from the root folder, run
+
 `npm run seed-db`
 `npm run start`
-This will create a sqlite database with synthetic data and start the server. By default it runs on port 3000. If you need to use a different one, set the PORT environment variable.
-Once the app is running, open the homepage by going to [http://localhost:3000](http://localhost:3000)
+
+This will create a sqlite database with synthetic data and start the server. By default it runs on port 3000. If you need to use a different one, set the PORT environment variable. Once the app is running, open the homepage by going to [http://localhost:3000](http://localhost:3000)
 
 ## Using the app
 
@@ -53,13 +63,16 @@ On the frontend side, I would spend some time tuning alignment and component siz
 - Submitting a review with status=unreviewed
 - Small screen support
 
+
+
 ## Edge cases to test
 
 - 1000000 records. I already know I didn't optimize for this, but I don't know when the system will fail
 - Corrupted data should not crash the app
 - A slow internet connection should not make the app unusable. Same goes for a slow device.
 
+
+
 ## Fun fact about the images
 
 I spent a few days in Bodie, CA, an abandoned 19th century mining town. The images in the app are photos I took of the random artifact that are left there.
-
